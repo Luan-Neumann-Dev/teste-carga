@@ -21,19 +21,32 @@ Seminário de Verificação e Validação de Software — Grupo 4 (Luan e Eduard
 node servidor.js
 ```
 
-**Terminal 2** — roda os testes, um por vez (35 segundos cada):
+**Terminal 2** — roda os testes, um por vez (35 segundos cada).
+
+Versão simples, só com a saída no terminal:
 
 ```bash
 k6 run -e VUS=5 carga.js
 ```
 
+Versão da apresentação, com painel visual ao vivo e relatório salvo em arquivo
+(sintaxe do PowerShell — veja a observação sobre shell mais abaixo):
+
 ```bash
-k6 run -e VUS=50 carga.js
+$env:K6_WEB_DASHBOARD_EXPORT="relatorio-5vus.html"; k6 run --out web-dashboard -e VUS=5 carga.js
 ```
 
 ```bash
-k6 run -e VUS=100 carga.js
+$env:K6_WEB_DASHBOARD_EXPORT="relatorio-50vus.html"; k6 run --out web-dashboard -e VUS=50 carga.js
 ```
+
+```bash
+$env:K6_WEB_DASHBOARD_EXPORT="relatorio-100vus.html"; k6 run --out web-dashboard -e VUS=100 carga.js
+```
+
+A variável continua valendo na janela do PowerShell até fechá-la, por isso cada
+linha redefine o nome do arquivo — senão o teste seguinte sobrescreveria o
+relatório do anterior.
 
 Para encerrar a API: `Ctrl+C` no Terminal 1.
 
@@ -79,6 +92,11 @@ vê gráficos se movendo em tempo real. Basta acrescentar `--out web-dashboard`:
 k6 run --out web-dashboard -e VUS=50 carga.js
 ```
 
+> **Atenção ao shell:** os comandos com variável de ambiente abaixo usam a
+> sintaxe do **PowerShell** (`$env:VAR="valor"; comando`), que é o terminal
+> padrão do Windows. No bash/Git Bash a forma é `VAR=valor comando`, e no
+> PowerShell ela dá erro de "termo não reconhecido".
+
 O k6 imprime o endereço do painel. Abra no navegador e projete essa janela:
 
 ```
@@ -97,7 +115,7 @@ O painel mostra, atualizando a cada segundo:
 o resultado, exporte o relatório em toda execução:
 
 ```bash
-K6_WEB_DASHBOARD_EXPORT=relatorio-50vus.html k6 run --out web-dashboard -e VUS=50 carga.js
+$env:K6_WEB_DASHBOARD_EXPORT="relatorio-50vus.html"; k6 run --out web-dashboard -e VUS=50 carga.js
 ```
 
 Isso gera um HTML independente com **os mesmos gráficos** do painel ao vivo
