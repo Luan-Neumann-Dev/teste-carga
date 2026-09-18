@@ -1,0 +1,5 @@
+# dependências do gerador de slides (reinstalar com: npm install)
+node_modules/
+
+# log de execução avulsa
+dashboard-run.log
