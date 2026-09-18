@@ -92,18 +92,25 @@ O painel mostra, atualizando a cada segundo:
 - **HTTP Request Failed** — a taxa de erro, que fica em 0% o tempo todo
 - **VUs** — a rampa de usuários subindo, sustentando e descendo
 
-**Detalhe importante:** o k6 **não encerra sozinho** quando o teste acaba — ele
-segue rodando para manter o painel no ar. O gráfico final fica parado na tela,
-que é justamente o que você quer para explicar o resultado com calma. Para sair,
-`Ctrl+C` no terminal.
-
-Para salvar o painel como arquivo (útil como plano B e como anexo do trabalho):
+**Detalhe importante:** quando o teste acaba, o k6 encerra e o painel em
+`127.0.0.1:5665` sai do ar junto — os gráficos somem da tela. Para não perder
+o resultado, exporte o relatório em toda execução:
 
 ```bash
-K6_WEB_DASHBOARD_EXPORT=relatorio.html k6 run --out web-dashboard -e VUS=50 carga.js
+K6_WEB_DASHBOARD_EXPORT=relatorio-50vus.html k6 run --out web-dashboard -e VUS=50 carga.js
 ```
 
-Gera um HTML independente, que abre em qualquer navegador sem precisar do k6.
+Isso gera um HTML independente com **os mesmos gráficos** do painel ao vivo
+(tempo de resposta, VUs, taxa de transferência), que abre em qualquer navegador
+com um duplo clique, sem precisar do k6 nem do servidor rodando.
+
+Na apresentação, exporte os três cenários com nomes diferentes e deixe as três
+abas abertas: dá para comparar os resultados lado a lado no final, coisa que o
+painel ao vivo não permite.
+
+O painel também tem um botão **REPORT** no canto superior direito que baixa esse
+mesmo relatório durante a execução — mas depender de clicar no meio da demo é
+mais arriscado do que já ter o arquivo salvo.
 
 ## Montagem na hora da apresentação
 
@@ -127,6 +134,9 @@ Roteiro dos 6 minutos:
 4. Rodar com 100 — apontar que a linha de requisições/segundo **não sobe**,
    só o tempo de resposta. E o threshold reprovando em vermelho no terminal
 5. Fechar mostrando o `✗ p(95)<500` e explicando o exit code 99
+
+Abra `http://127.0.0.1:5665` assim que cada teste começar — o painel só existe
+enquanto o k6 está rodando. Depois que ele encerra, use o `.html` exportado.
 
 ## Plano B na apresentação
 
